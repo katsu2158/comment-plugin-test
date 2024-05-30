@@ -1,14 +1,29 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const bodyParser = require("body-parser");
-const cors = require("cors");
+//const cors = require("cors");
 
 const app = express();
 //const PORT = 3000;
-const PORT = 8080;
+
+const allowCrossDomain = function(req, res, next) {
+  res.header('Access-Control-Allow-Origin', 'https://app.reearth.io')
+  res.header('Access-Control-Allow-Method', 'GET','POST')
+//  res.header('Access-Control-Allow-Origin', '*')
+  res.header(
+    'Access-Control-Allow-Headers',
+  )
+
+  if ('OPTIONS' === req.method) {
+    res.sendStatus(200)
+  } else {
+    next()
+  }
+}
+app.use(allowCrossDomain)
 
 // Enable CORS for all routes
-app.use(cors());
+//app.use(cors());
 
 // Middleware to parse JSON bodies
 app.use(bodyParser.json());
@@ -158,6 +173,9 @@ app.post("/posts/:postId/dislike", async (req, res) => {
 // -------- ooooooooo --------//
 
 // Start the server
-app.listen(PORT, () => {
-  console.log(`Server is running on http://localhost:${PORT}`);
+//app.listen(PORT, () => {
+//  console.log(`Server is running on http://localhost:${PORT}`);
+const port = parseInt(process.env.PORT) || 8080;
+app.listen(port, () => {
+  console.log(`helloworld: listening on port ${port}`);
 });
